@@ -1,5 +1,3 @@
-// components/FloatingChat.tsx
-
 'use client';
 
 import { useState, FormEvent, useEffect, useRef } from 'react';
@@ -86,30 +84,31 @@ export default function FloatingChat() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {isOpen ? (
-        <div className="bg-white rounded-xl shadow-2xl border border-primary-100 flex flex-col w-80 h-[400px] animate-fade-in">
-          <div className="bg-primary-700 text-white p-4 rounded-t-xl flex items-center justify-between">
+        // ATENÇÃO: Alterações mais agressivas na largura e altura
+        <div className="bg-white rounded-xl shadow-2xl border border-primary-100 flex flex-col w-64 h-[300px] animate-fade-in">
+          <div className="bg-primary-700 text-white p-3 rounded-t-xl flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-6 w-6" />
-              <span className="font-semibold">Assistente de IA</span>
+              <Sparkles className="h-5 w-5" />
+              <span className="font-semibold text-sm">Assistente de IA</span>
             </div>
             <button onClick={() => setIsOpen(false)} className="p-1 rounded-full hover:bg-primary-600 transition-colors">
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 text-sm">
+          <div className="flex-1 p-3 overflow-y-auto space-y-2 text-xs">
             {messages.map((message) => (
               <div key={message.id} className={`flex gap-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {message.sender === 'bot' && <Bot className="h-6 w-6 text-primary-700 mt-1" />}
-                <div className={`max-w-[80%] p-3 rounded-xl shadow-md ${message.sender === 'user' ? 'bg-primary-100 text-neutral-800' : 'bg-neutral-200 text-neutral-800'}`}>
+                {message.sender === 'bot' && <Bot className="h-5 w-5 text-primary-700 mt-1" />}
+                <div className={`max-w-[80%] p-2 rounded-lg shadow-md ${message.sender === 'user' ? 'bg-primary-100 text-neutral-800' : 'bg-neutral-200 text-neutral-800'}`}>
                   {message.text}
                 </div>
-                {message.sender === 'user' && <User className="h-6 w-6 text-neutral-700 mt-1" />}
+                {message.sender === 'user' && <User className="h-5 w-5 text-neutral-700 mt-1" />}
               </div>
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[80%] p-3 rounded-xl shadow-md bg-neutral-200 text-neutral-800 animate-pulse">
+                <div className="max-w-[80%] p-2 rounded-lg shadow-md bg-neutral-200 text-neutral-800 animate-pulse">
                   Digitando...
                 </div>
               </div>
@@ -117,13 +116,13 @@ export default function FloatingChat() {
             <div ref={messagesEndRef} />
           </div>
 
-          <form onSubmit={handleSendMessage} className="p-3 border-t border-neutral-200 flex items-center gap-2">
+          <form onSubmit={handleSendMessage} className="p-2 border-t border-neutral-200 flex items-center gap-1">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Digite sua pergunta..."
-              className="flex-1 p-2 rounded-full border border-neutral-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-700"
+              className="flex-1 p-2 rounded-full border border-neutral-300 text-xs focus:outline-none focus:ring-2 focus:ring-primary-700"
               disabled={isLoading}
             />
             <button
@@ -131,16 +130,16 @@ export default function FloatingChat() {
               className="bg-primary-700 text-white p-2 rounded-full hover:bg-primary-600 transition-colors disabled:bg-neutral-400"
               disabled={!input.trim() || isLoading}
             >
-              <MessageSquareText className="h-5 w-5" />
+              <MessageSquareText className="h-4 w-4" />
             </button>
           </form>
         </div>
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-primary-700 text-white p-4 rounded-full shadow-lg hover:bg-primary-600 transition-colors duration-200"
+          className="bg-primary-700 text-white p-3 rounded-full shadow-lg hover:bg-primary-600 transition-colors duration-200"
         >
-          <Sparkles className="h-8 w-8" />
+          <Sparkles className="h-6 w-6" />
         </button>
       )}
     </div>
