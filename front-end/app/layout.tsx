@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { CartProvider } from '@/lib/context/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import FloatingChat from '@/components/FloatingChat';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <FloatingChat/>
           </div>
         </CartProvider>
       </body>

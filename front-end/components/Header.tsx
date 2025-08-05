@@ -41,12 +41,7 @@ export default function Header() {
             >
               Produtos
             </Link>
-            <Link 
-              href="/ajuda"
-              className='text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
-              >
-              Quer ajuda ?
-            </Link>
+            
             <Link 
               href="/sobre"
               className='text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200'
@@ -97,13 +92,6 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Produtos
-              </Link>
-              <Link 
-                href="/ajuda"
-                className='block text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200'
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Quer ajuda ?
               </Link>
               <Link 
                 href="/sobre"
