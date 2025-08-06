@@ -1,15 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { Product } from '@/lib/types/product';
 
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string;
-  description: string;
-  category: string;
-}
 
 export interface CartItem extends Product {
   quantity: number;

@@ -71,7 +71,7 @@ app.get('/api/products', async (req, res) => {
       console.error('Erro ao buscar produtos do Supabase:', error);
       return res.status(500).json({ error: 'Erro ao buscar produtos no banco de dados.' });
     }
-console.log('Produtos retornados:', data);
+
 
 
     res.json({ products: data });
