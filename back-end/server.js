@@ -1,9 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 dotenv.config();
+
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const supabase = require('./supabase');
+
+
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -56,7 +60,52 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: 'Erro ao se comunicar com a IA. Tente novamente mais tarde.' });
   }
 });
-// ... (outras rotas) ...
+
+app.get('/api/products', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*');
+
+    if (error) {
+      console.error('Erro ao buscar produtos do Supabase:', error);
+      return res.status(500).json({ error: 'Erro ao buscar produtos no banco de dados.' });
+    }
+console.log('Produtos retornados:', data);
+
+
+    res.json({ products: data });
+  } catch (error) {
+    console.error('Erro interno no servidor:', error);
+    res.status(500).json({ error: 'Erro interno do servidor.' });
+  }
+});
+
+
+app.get('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') { // Código de erro para "not found"
+        return res.status(404).json({ error: 'Produto não encontrado.' });
+      }
+      console.error('Erro ao buscar produto por ID:', error);
+      return res.status(500).json({ error: 'Erro ao buscar o produto no banco de dados.' });
+    }
+
+    res.json({ product: data });
+  } catch (error) {
+    console.error('Erro interno no servidor:', error);
+    res.status(500).json({ error: 'Erro interno do servidor.' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
