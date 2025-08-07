@@ -69,9 +69,11 @@ export default function ProdutoPage() {
 
   // Lógica para adicionar ao carrinho
   const handleAddToCart = () => {
-    // Certifique-se de que o produto tem as propriedades necessárias
     if (product) {
-      dispatch({ type: 'ADD_ITEM', payload: product });
+      // Loop para adicionar a quantidade selecionada de produtos
+      for (let i = 0; i < quantity; i++) {
+        dispatch({ type: 'ADD_ITEM', payload: product });
+      }
     }
   };
 
