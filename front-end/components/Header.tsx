@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useCart } from '@/lib/context/CartContext';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, User } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
@@ -64,7 +64,13 @@ export default function Header() {
                 </span>
               )}
             </Link>
-            
+            {/* Profile */}
+            <Link
+              href="/login"
+              className="p-2 text-neutral-700 hover:text-primary-700 transition-colors duration-200"
+            >
+              <User className="h-6 w-6" />
+            </Link>
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
