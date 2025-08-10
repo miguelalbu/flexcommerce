@@ -107,6 +107,76 @@ app.get('/api/products/:id', async (req, res) => {
   }
 });
 
+// ROTA DE CADASTRO
+app.post('/auth/signup', async (req, res) => {
+  const { email, password, name, phone } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email e senha são obrigatórios.' });
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name, phone }
+      }
+    });
+
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    return res.status(201).json({ message: 'Cadastro realizado com sucesso!', user: data.user });
+  } catch (err) {
+    return res.status(500).json({ message: 'Erro interno no servidor.' });
+  }
+});
+
+// ROTA DE LOGIN
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email e senha são obrigatórios.' });
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    return res.status(200).json({ message: 'Login realizado com sucesso!', user: data.user, session: data.session });
+  } catch (err) {
+    return res.status(500).json({ message: 'Erro interno no servidor.' });
+  }
+});
+
+// ROTA DE LOGIN/CADASTRO COM GOOGLE
+app.get('/auth/google', async (req, res) => {
+  try {
+    const redirectTo = req.query.redirectTo || 'http://localhost:3000/perfil'; // para onde o usuário será redirecionado após login
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+      },
+    });
+
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    // Redireciona o usuário para a URL de autenticação do Google
+    return res.redirect(data.url);
+  } catch (err) {
+    return res.status(500).json({ message: 'Erro ao iniciar login com Google.' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
