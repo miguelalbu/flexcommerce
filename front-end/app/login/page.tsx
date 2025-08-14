@@ -49,7 +49,7 @@ export default function LoginPage() {
     try {
       if (isLoginView) {
         // Chamada para API de login
-        const res = await fetch('http://localhost:3001/auth/login', {
+        const res = await fetch('api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
@@ -73,7 +73,7 @@ export default function LoginPage() {
           return;
         }
         // Chamada para API de cadastro
-        const res = await fetch('http://localhost:3001/auth/signup', {
+        const res = await fetch('api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, phone, email, password }),

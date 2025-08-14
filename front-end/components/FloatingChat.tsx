@@ -5,16 +5,16 @@ import { Sparkles, X, MessageSquareText, Bot, User } from 'lucide-react';
 
 // Tipagem para as mensagens
 interface Message {
-  id: number;
+  id: string; // Mudado para string para usar um ID único
   text: string;
   sender: 'user' | 'bot';
 }
 
 export default function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     {
-      id: 1,
+      id: crypto.randomUUID(), // Usando um ID único
       text: 'Olá! Sou seu assistente de IA. Estou aqui para te ajudar a encontrar o perfume perfeito ou tirar dúvidas sobre nossos produtos.',
       sender: 'bot',
     },
@@ -36,23 +36,26 @@ export default function FloatingChat() {
     e.preventDefault();
     if (input.trim() === '') return;
 
+    // Adiciona a mensagem do usuário imediatamente
     const userMessage = {
-      id: messages.length + 1,
+      id: crypto.randomUUID(),
       text: input,
       sender: 'user' as const,
     };
-
     setMessages((prevMessages) => [...prevMessages, userMessage]);
+    
+    // Limpa o input antes de enviar
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: userMessage.text }),
+        body: JSON.stringify({ prompt: currentInput }), // CORRIGIDO: Envia a mensagem real do usuário
       });
 
       if (!response.ok) {
@@ -62,7 +65,7 @@ export default function FloatingChat() {
       const data = await response.json();
       
       const botMessage = {
-        id: messages.length + 2,
+        id: crypto.randomUUID(),
         text: data.response,
         sender: 'bot' as const,
       };
@@ -71,7 +74,7 @@ export default function FloatingChat() {
     } catch (error) {
       console.error('Erro ao buscar resposta da IA:', error);
       const errorMessage = {
-        id: messages.length + 2,
+        id: crypto.randomUUID(),
         text: 'Desculpe, ocorreu um erro. Tente novamente mais tarde.',
         sender: 'bot' as const,
       };
@@ -84,7 +87,6 @@ export default function FloatingChat() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {isOpen ? (
-        // ATENÇÃO: Alterações mais agressivas na largura e altura
         <div className="bg-white rounded-xl shadow-2xl border border-primary-100 flex flex-col w-64 h-[300px] animate-fade-in">
           <div className="bg-primary-700 text-white p-3 rounded-t-xl flex items-center justify-between">
             <div className="flex items-center gap-2">

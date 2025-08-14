@@ -24,7 +24,7 @@ export default function ProdutoPage() {
       if (!params.id) return;
       
       try {
-        const response = await fetch(`http://localhost:3001/api/products/${params.id}`);
+        const response = await fetch(`/api/products/${params.id}`);
         
         if (!response.ok) {
           throw new Error('Produto não encontrado.');
