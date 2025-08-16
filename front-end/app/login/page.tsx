@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { Mail, Lock, User, Phone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function LoginPage() {
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   // Estados para campos comuns de login/registro
   const [email, setEmail] = useState('');
@@ -48,20 +50,21 @@ export default function LoginPage() {
 
     try {
       if (isLoginView) {
-        // Chamada para API de login
-        const res = await fetch('api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+        // Chamada direta para a função de login do Supabase
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
         });
-        const data = await res.json();
-        if (!res.ok) {
-          setMessage(data.message || 'Erro ao fazer login');
+
+        if (error) {
+          setMessage(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
           setIsError(true);
         } else {
           setMessage('Login realizado com sucesso!');
           setIsError(false);
-          clearFields();
+          // O `router.refresh()` é crucial para que os componentes do lado do servidor
+          // (Server Components) que dependem da sessão de autenticação sejam atualizados.
+          router.refresh(); 
           router.push('/perfil');
         }
       } else {
@@ -72,40 +75,49 @@ export default function LoginPage() {
           setLoading(false);
           return;
         }
-        // Chamada para API de cadastro
-        const res = await fetch('api/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, email, password }),
+
+        // Chamada direta para a função de cadastro do Supabase
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            // Salva dados adicionais do usuário (name, phone) no metadata
+            data: { name, phone },
+          },
         });
-        const data = await res.json();
-        if (!res.ok) {
-          // Verifica se o erro é de e-mail já cadastrado
-          if (data.message && data.message.toLowerCase().includes('already registered')) {
-            setMessage('Este e-mail já está cadastrado. Faça login ou recupere sua senha.');
-          } else if (data.message && data.message.toLowerCase().includes('already exists')) {
-            setMessage('Este e-mail já está cadastrado. Faça login ou recupere sua senha.');
-          } else {
-            setMessage(data.message || 'Erro ao cadastrar');
-          }
+
+        if (error) {
+          setMessage(error.message || 'Erro ao cadastrar.');
           setIsError(true);
         } else {
-          setMessage('Cadastro realizado com sucesso!');
+          setMessage('Cadastro realizado com sucesso! Verifique seu e-mail para confirmar a conta.');
           setIsError(false);
           clearFields();
-          router.push('/perfil');
+          // Não redireciona imediatamente, pois o usuário precisa confirmar o e-mail
         }
       }
     } catch (error) {
-      setMessage('Erro de conexão com o servidor');
+      setMessage('Erro de conexão. Verifique sua conexão com a internet.');
       setIsError(true);
     }
     setLoading(false);
   };
 
-  // Função para login/cadastro com Google
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3001/auth/google';
+  // Função para login com Google (ainda usa a rota, mas a lógica da rota precisa ser ajustada)
+  const handleGoogleLogin = async () => {
+    // Isso deve redirecionar o usuário para a página de autenticação do Supabase
+    // A rota /auth/google deve ser tratada como um Server Action ou Route Handler
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setMessage('Erro ao tentar autenticar com o Google.');
+      setIsError(true);
+    }
   };
 
   return (
