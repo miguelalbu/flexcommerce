@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Instancia o cliente da API do Gemini usando a chave de ambiente
-// Next.js carrega as variáveis de ambiente automaticamente, então não precisa de `dotenv`
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 export async function POST(req: Request) {

@@ -1,19 +1,73 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { ArrowLeft, User, ShoppingBag, Heart, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
+
+interface UserProfile {
+  name: string;
+  email: string;
+}
 
 export default function PerfilPage() {
-  // Dados de usuário fictícios para o front-end
-  const user = {
-    name: 'Nome do Usuário',
-    email: 'usuario@example.com',
-  };
+  // Estado para armazenar os dados do usuário e o status de carregamento
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleLogout = () => {
-    // Ação de logout (não funcional por enquanto)
-    alert('Logout simulado');
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+
+  // Função para buscar os dados do usuário
+  useEffect(() => {
+    async function getUser() {
+      // Obtém a sessão do usuário
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      // Se não houver sessão ou houver um erro, redireciona para a página de login
+      if (!session || error) {
+        console.error('Nenhuma sessão encontrada. Redirecionando para o login.');
+        router.push('/login');
+        return;
+      }
+
+      // Extrai os dados do perfil da sessão
+      const user = session.user;
+      const name = user.user_metadata.name || 'Usuário';
+      const email = user.email || 'Email não disponível';
+
+      // Atualiza o estado com os dados do usuário
+      setUserProfile({ name, email });
+      setIsLoading(false);
+    }
+
+    getUser();
+  }, [router, supabase]);
+
+  // Função para lidar com o logout
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    // Após o logout, redireciona para a página inicial
+    router.push('/');
   };
+  
+  // Exibe um estado de carregamento enquanto busca os dados do usuário
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+        <p className="text-xl font-semibold text-neutral-600">Carregando...</p>
+      </div>
+    );
+  }
+
+  // Se não houver perfil do usuário (caso raro, mas para segurança), retorna null
+  if (!userProfile) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -32,8 +86,8 @@ export default function PerfilPage() {
               <User className="h-10 w-10" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-neutral-900">{user.name}</h1>
-              <p className="text-neutral-600">{user.email}</p>
+              <h1 className="text-3xl font-bold text-neutral-900">{userProfile.name}</h1>
+              <p className="text-neutral-600">{userProfile.email}</p>
             </div>
           </div>
 
