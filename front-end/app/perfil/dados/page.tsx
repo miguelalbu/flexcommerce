@@ -120,8 +120,6 @@ export default function DadosPerfilPage() {
       setNewPassword('');
       setConfirmNewPassword('');
 
-      // A principal correção: força a revalidação da sessão no Next.js
-      // Isso faz com que a página busque os dados mais recentes do Supabase.
       router.refresh();
 
     } catch (error: any) {
