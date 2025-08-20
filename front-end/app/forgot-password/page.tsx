@@ -1,5 +1,3 @@
-// app/forgot-password/page.tsx
-
 'use client';
 
 import { useState } from 'react';
@@ -73,7 +71,6 @@ export default function ForgotPassword() {
             />
           </div>
 
-          {/* Mensagem de feedback condicional */}
           {message && (
             <div
               className={`flex items-center space-x-2 text-sm text-center font-medium py-2 rounded-md ${

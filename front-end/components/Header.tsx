@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useCart } from '@/lib/context/CartContext';
-import { ShoppingCart, Menu, X, User } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import ProfileMenu from './ProfileMenu'; // Importe o componente ProfileMenu
 
 export default function Header() {
   const { state } = useCart();
@@ -64,13 +65,10 @@ export default function Header() {
                 </span>
               )}
             </Link>
-            {/* Profile */}
-            <Link
-              href="/login"
-              className="p-2 text-neutral-700 hover:text-primary-700 transition-colors duration-200"
-            >
-              <User className="h-6 w-6" />
-            </Link>
+            
+            {/* Substituição do Link de login pelo componente ProfileMenu */}
+            <ProfileMenu />
+
             {/* Mobile menu button */}
             <button
               onClick={toggleMenu}
@@ -106,6 +104,21 @@ export default function Header() {
               >
                 Sobre Nós
               </Link>
+              
+              {/* Opcional: Adicionar links do perfil no menu mobile também */}
+              {/* <div className="border-t border-gray-100 mt-2"></div>
+              {user ? (
+                <>
+                  <Link href="/perfil" className="..." onClick={() => setIsMenuOpen(false)}>Perfil</Link>
+                  <Link href="/meus-pedidos" className="..." onClick={() => setIsMenuOpen(false)}>Meus Pedidos</Link>
+                  <button onClick={handleLogout} className="...">Sair</button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="..." onClick={() => setIsMenuOpen(false)}>Login</Link>
+                  <Link href="/cadastro" className="..." onClick={() => setIsMenuOpen(false)}>Criar Conta</Link>
+                </>
+              )} */}
 
             </div>
           </div>

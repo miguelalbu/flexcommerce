@@ -34,9 +34,13 @@ export default function Home() {
                   <span>Ver Produtos</span>
                   <ArrowRight className="h-5 w-5" />
                 </Link>
-                <button className="border-2 border-primary-700 text-primary-700 hover:bg-primary-700 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200">
-                  Saiba Mais
-                </button>
+                <Link 
+                  href="/sobre"
+                  className="bg-primary-700 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center justify-center space-x-2 transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  <span>Saiba Mais</span>
+                  <ArrowRight className="h-5 w-5" />
+                </Link>
               </div>
             </div>
             
