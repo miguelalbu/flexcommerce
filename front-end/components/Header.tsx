@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useCart } from '@/lib/context/CartContext';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import ProfileMenu from './ProfileMenu'; // Importe o componente ProfileMenu
+import ProfileMenu from './ProfileMenu';
 
 export default function Header() {
   const { state } = useCart();
@@ -104,21 +104,7 @@ export default function Header() {
               >
                 Sobre Nós
               </Link>
-              
-              {/* Opcional: Adicionar links do perfil no menu mobile também */}
-              {/* <div className="border-t border-gray-100 mt-2"></div>
-              {user ? (
-                <>
-                  <Link href="/perfil" className="..." onClick={() => setIsMenuOpen(false)}>Perfil</Link>
-                  <Link href="/meus-pedidos" className="..." onClick={() => setIsMenuOpen(false)}>Meus Pedidos</Link>
-                  <button onClick={handleLogout} className="...">Sair</button>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" className="..." onClick={() => setIsMenuOpen(false)}>Login</Link>
-                  <Link href="/cadastro" className="..." onClick={() => setIsMenuOpen(false)}>Criar Conta</Link>
-                </>
-              )} */}
+
 
             </div>
           </div>
