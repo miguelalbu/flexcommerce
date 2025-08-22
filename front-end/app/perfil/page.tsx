@@ -101,7 +101,7 @@ export default function PerfilPage() {
               <p className="text-neutral-600">
                 Acompanhe o status dos seus pedidos, visualize o histórico de compras e faça o rastreamento.
               </p>
-              <Link href="/meus-pedidos" className="mt-4 inline-block text-primary-600 hover:text-primary-500 font-medium">
+              <Link href="perfil/meus-pedidos" className="mt-4 inline-block text-primary-600 hover:text-primary-500 font-medium">
                 Ver todos os pedidos
               </Link>
             </div>
@@ -129,7 +129,7 @@ export default function PerfilPage() {
               <p className="text-neutral-600">
                 Revise a sua lista de produtos favoritos para encontrar rapidamente o que você ama.
               </p>
-              <Link href="/favoritos" className="mt-4 inline-block text-primary-600 hover:text-primary-500 font-medium">
+              <Link href="perfil/favoritos" className="mt-4 inline-block text-primary-600 hover:text-primary-500 font-medium">
                 Ver favoritos
               </Link>
             </div>

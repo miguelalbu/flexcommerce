@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY as string
 );
 
-// Define a tipagem para os parâmetros da URL
+
 interface Context {
   params: {
     id: string;
@@ -25,7 +25,7 @@ export async function GET(req: Request, context: Context) {
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') { // Código de erro para "not found"
+      if (error.code === 'PGRST116') { 
         return NextResponse.json({ error: 'Produto não encontrado.' }, { status: 404 });
       }
       console.error('Erro ao buscar produto por ID:', error);
